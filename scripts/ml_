@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+# -* coding: utf-8 -*-
+
+import sys
+import os
+
+"""
+create directories
+"""
+folder_tuple = sys.argv
+first_folder = f'{folder_tuple[0].split("/")[-1]}{folder_tuple[1]}'
+print(f'Create {first_folder} folder')
+os.system(f"mkdir '{first_folder}'")
+os.system(f"mkdir '{first_folder}/scripts'")
+os.system(f"mkdir '{first_folder}/api'")
+os.system(f"mkdir '{first_folder}/notebooks'")
+os.system(f"mkdir '{first_folder}/tests'")
+os.system(f"mkdir '{first_folder}/{first_folder}_pkg'")
+
+
+"""
+create files
+"""
+with open(f"{first_folder}/Makefile", "w") as file:
+  print('le fichier Makefile est créé')
+
+with open(f"{first_folder}/.gitignore","w") as file:
+  print('le fichier .gitignore est créé')
+
+with open(f"{first_folder}/README.md","w") as file:
+  string = f"#Projet {first_folder}"
+  file.write(string)
+
+with open(f"{first_folder}/requirements.txt","w") as file:
+  string = """
+pandas
+matplotlib
+seaborn
+setuptools
+  """
+  file.write(string)
+
+with open(f"{first_folder}/setup.py","w") as file:
+  string = f"""
+from setuptools import setup
+
+setup(
+name='{first_folder}',
+version='0.0.1',
+packages=['{first_folder}_pkg'],
+scripts=['scripts/{first_folder}_scripts'],
+)
+  """
+  file.write(string)
+
+
+with open(f"{first_folder}/scripts/generator","w") as file:
+  string = """
+#!/usr/bin/env python
+#-* coding: utf-8 -*-
+import sys
+import os
+  """
+  file.write(string)
