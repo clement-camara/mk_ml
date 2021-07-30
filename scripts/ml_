@@ -21,8 +21,19 @@ os.system(f"mkdir '{first_folder}/{first_folder}_pkg'")
 """
 create files
 """
+os.system(f"touch '{first_folder}/{first_folder}_pkg/__init__.py'")
+
 with open(f"{first_folder}/Makefile", "w") as file:
   print('le fichier Makefile est créé')
+  string = """
+test:
+	open "https://www.google.fr"
+
+install_requirements:
+	@pip install -r requirements.txt
+
+  """
+  file.write(string)
 
 with open(f"{first_folder}/.gitignore","w") as file:
   print('le fichier .gitignore est créé')
@@ -62,3 +73,4 @@ import sys
 import os
   """
   file.write(string)
+
