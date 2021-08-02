@@ -66,6 +66,7 @@ f"""class Class_{folder}:
 template.create_files(folder,'Makefile',
 f"""create_env:
 	@conda create --name {folder}_env
+	print("Saisir dans la console : conda activate {folder}_env")
 
 install_requirements:
 	@conda install pip
