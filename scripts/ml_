@@ -68,6 +68,7 @@ f"""create_env:
 	@conda create --name {folder}_env
 
 install_requirements:
+	@conda install pip
 	@pip install -r requirements.txt
 
 maj_requirements:
