@@ -15,7 +15,7 @@
 ## Rappels
 * Pour lancer package depuis Github :
 ````shell
-pip install git+https://github.com/url.git
+pip install git+https://github.com/clement-camara/mk_ml.git
 ````
 ---
 * Liens :
