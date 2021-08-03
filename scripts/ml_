@@ -42,7 +42,7 @@ template = Template(first_folder)
 #create directories
 folder = template.create_directories(template.folder)
 scripts = template.create_directories(f'{template.folder}/scripts')
-api = template.create_directories(f'{template.folder}/api')
+app = template.create_directories(f'{template.folder}/app')
 notebooks = template.create_directories(f'{template.folder}/notebooks')
 test = template.create_directories(f'{template.folder}/tests')
 pkg = template.create_directories(f'{template.folder}/{template.folder}_pkg')
@@ -54,7 +54,6 @@ db = template.create_directories(f'{data}/db')
 
 #create files
 template.create_files(pkg,'__init__.py',"")
-template.create_files(folder,'Dockerfile',"")
 template.create_files(notebooks,f'{folder}_nb.ipynb',"")
 template.create_files(folder,'README.md',f'# Projet {folder}')
 template.create_files(pkg,f'{folder}_classe.py',
@@ -63,23 +62,40 @@ f"""class Class_{folder}:
 		print('constructor')
 """)
 
+template.create_files(app,'Dockerfile',
+"""FROM python:3.9
+
+COPY . /app/app
+
+WORKDIR /app/app
+
+RUN pip install -r requirements.txt
+
+EXPOSE 80
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]""")
+
 template.create_files(folder,'Makefile',
 f"""create_env:
-	@conda create --name {folder}_env
-	print("Saisir dans la console : conda activate {folder}_env")
+	@conda create --name {folder}_env  python=3.9
+	@echo "Saisir dans la console : conda activate {folder}_env"
 
 install_requirements:
 	@conda install pip
-	@pip install -r requirements.txt
+	@pip install -r app/requirements.txt
 
 maj_requirements:
-	@pip freeze > requirements.txt
+	@pip freeze > app/requirements.txt
 """)
-template.create_files(folder,'requirements.txt',
+template.create_files(app,'requirements.txt',
 """pandas
 matplotlib
 seaborn
 setuptools
+uvicorn
+gunicorn
+pip
+pydantic
 fastapi """)
 
 template.create_files(folder,'setup.py',
@@ -98,7 +114,7 @@ template.create_files(scripts,f'{folder}_scripts',
 import sys
 import os """)
 
-template.create_files(api,f'main.py',
+template.create_files(app,f'main.py',
 """#basic
 from fastapi import FastAPI
 import pandas as pd
