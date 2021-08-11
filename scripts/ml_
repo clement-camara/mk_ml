@@ -56,24 +56,36 @@ db = template.create_directories(f'{data}/db')
 #create files
 template.create_files(pkg,'__init__.py',"")
 template.create_files(folder,'README.md',f'# Projet {folder}')
+template.create_files(folder,'env.sh',f'conda activate {folder}_env')
+
 template.create_files(pkg,f'{folder}_classe.py',
 f"""class Class_{folder}:
 	def __init__(self):
 		print('constructor')
 """)
 
-template.create_files(app,'Dockerfile',
-"""FROM python:3.9
+template.create_files(folder,'Dockerfile',
+f"""# installer version python
 
-COPY . /app/app
+FROM python:3.9
 
-WORKDIR /app/app
-
+# Installation des requirements après les avoir copier sur l'image disque
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+# Précise le port de l'image
 EXPOSE 80
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]""")
+# Copie les repertoires de la racine à l'image du docker
+COPY ./app /app
+COPY ./{template.folder}_pkg /{template.folder}_pkg
+
+# lancer unicorn et l'app via fastapi
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+
+# à lancer dans le shell
+# docker build -t nom_image .
+# docker run --name pinguins -p 80:80 nom_image""")
 
 template.create_files(notebooks,f'{folder}_nb.ipynb',
 """{
@@ -154,17 +166,20 @@ template.create_files(notebooks,f'{folder}_nb.ipynb',
 
 template.create_files(folder,'Makefile',
 f"""create_env:
-	@conda create --name {folder}_env  python=3.9
+	@conda create --name {folder}_env  python=3.8
 	@echo "Saisir dans la console : conda activate {folder}_env"
 
 install_requirements:
 	@conda install pip
-	@pip install -r app/requirements.txt
+	@pip install -r requirements.txt
 
 maj_requirements:
-	@pip freeze > app/requirements.txt
+	@pip freeze > requirements.txt
+
+change_env:
+    @echo "saisir . ./env.sh"
 """)
-template.create_files(app,'requirements.txt',
+template.create_files(folder,'requirements.txt',
 """pandas
 matplotlib
 seaborn
@@ -173,6 +188,10 @@ uvicorn
 gunicorn
 pip
 pydantic
+jupyterlab
+notebook
+sklearn
+jupyter_contrib_nbextensions
 fastapi """)
 
 template.create_files(folder,'setup.py',

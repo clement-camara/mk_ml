@@ -23,6 +23,8 @@ pip install git+https://github.com/clement-camara/mk_ml.git
     * https://docs.python-guide.org/writing/structure/#modules
     * https://anweshadas.in/how-to-upload-a-package-in-pypi-using-twine/
     * https://pypi.org/project/incremental/
+    * https://youtube.com/watch?v=D7-YDr6ZVZI&feature=share
+    * https://plotly.com/javascript/
 ---
 * Pour chaîner des tâches dans votre Makefile :
 
@@ -36,6 +38,19 @@ coco:
     @echo coco
 
 all: toto coco
+```
+
+* Pour ne pas relancer constamment les pip install . apres modification
+
+```python
+pip install -e .
+%load_ext autoreload
+%autoreload 2
+```
+
+* Pour les pbs liés à notebook extension
+```python
+pip install jupyter_contrib_nbextensions && jupyter contrib nbextension install
 ```
 
 
