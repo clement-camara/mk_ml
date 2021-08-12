@@ -56,7 +56,6 @@ db = template.create_directories(f'{data}/db')
 #create files
 template.create_files(pkg,'__init__.py',"")
 template.create_files(folder,'README.md',f'# Projet {folder}')
-template.create_files(folder,'env.sh',f'conda activate {folder}_env')
 
 template.create_files(pkg,f'{folder}_classe.py',
 f"""class Class_{folder}:
@@ -173,10 +172,6 @@ install_requirements:
 	@conda install pip
 	@pip install -r requirements.txt
 
-see_docker_command
-    @echo "docker build -t nom_image ."
-    @echo "docker run --name nom_contener -p 8000:80 nom_image"
-
 maj_requirements:
 	@pip freeze > requirements.txt""")
 
@@ -217,11 +212,24 @@ import pandas as pd
 import numpy as np
 import json
 
-#scrap
-import requests
-from bs4 import BeautifulSoup
+#for Cors policy
+from fastapi.middleware.cors import CORSMiddleware
+
+#System
+import sys
 
 app = FastAPI()
+
+#for Cors policy, allows connect navigator with app
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get('/')
 
