@@ -85,7 +85,7 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
 
 # à lancer dans le shell
 # docker build -t nom_image .
-# docker run --name pinguins -p 80:80 nom_image""")
+# docker run --name nom_contener -p 8080:80 nom_image""")
 
 template.create_files(notebooks,f'{folder}_nb.ipynb',
 """{
@@ -173,12 +173,13 @@ install_requirements:
 	@conda install pip
 	@pip install -r requirements.txt
 
-maj_requirements:
-	@pip freeze > requirements.txt
+see_docker_command
+    @echo "docker build -t nom_image ."
+    @echo "docker run --name nom_contener -p 8000:80 nom_image"
 
-change_env:
-    @echo "saisir . ./env.sh"
-""")
+maj_requirements:
+	@pip freeze > requirements.txt""")
+
 template.create_files(folder,'requirements.txt',
 """pandas
 matplotlib
@@ -187,7 +188,6 @@ setuptools
 uvicorn
 gunicorn
 pip
-pydantic
 jupyterlab
 notebook
 sklearn
